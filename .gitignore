@@ -326,5 +326,12 @@ _Pvt_Extensions
 .idea/
 *.sln.iml
 
-AuthorizationServer/tempkey\.rsa
-AuthorizationServer/.vscode
+.idea
+*.iml
+build
+target
+
+.gradle
+local.properties
+*.lock
+/app/snippets-api
