@@ -27,7 +27,7 @@ fun main(args: Array<String>) {
 
         install(Authentication) {
             oauth("IdentityServer4") {
-                client = HttpCl ient(Apache)
+                client = HttpClient(Apache)
                 providerLookup = { clientSettings }
                 urlProvider = { "http://localhost:8080/callback" }
             }
