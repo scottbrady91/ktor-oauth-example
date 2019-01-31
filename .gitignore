@@ -335,3 +335,6 @@ target
 local.properties
 *.lock
 /app/snippets-api
+
+**/tempkey.rsa
+**/identityserver4_log.txt
