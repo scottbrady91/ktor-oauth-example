@@ -39,7 +39,7 @@ namespace AuthorizationServer
                     AllowedGrantTypes = GrantTypes.Code,
                     AllowedScopes = {"api1.read", "api1.write"},
                     ClientSecrets = {new Secret("super_secret".Sha256())},
-                    RedirectUris = {"http://localhost:8080/callback"}
+                    RedirectUris = {"http://localhost:8080/oauth"}
                 }
             };
         }

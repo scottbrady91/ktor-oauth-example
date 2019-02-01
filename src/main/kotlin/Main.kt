@@ -10,16 +10,15 @@ import io.ktor.routing.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.Netty
 
-// TODO: what is the response mode?
 val clientSettings = OAuthServerSettings.OAuth2ServerSettings(
     name = "IdentityServer4",
     authorizeUrl = "http://localhost:5000/connect/authorize", // OAuth authorization endpoint
     accessTokenUrl = "http://localhost:5000/connect/token", // OAuth token endpoint
     clientId = "ktor_app",
     clientSecret = "super_secret",
-    accessTokenRequiresBasicAuth = false, // basic auth implementation is not "OAuth style"
+    accessTokenRequiresBasicAuth = false, // basic auth implementation is not "OAuth style" so falling back to post body
     requestMethod = HttpMethod.Post, // must POST to token endpoint
-    defaultScopes = listOf("api1.read", "api1.write")
+    defaultScopes = listOf("api1.read", "api1.write") // what scopes to request
 )
 
 fun main(args: Array<String>) {
@@ -29,22 +28,21 @@ fun main(args: Array<String>) {
             oauth("IdentityServer4") {
                 client = HttpClient(Apache)
                 providerLookup = { clientSettings }
-                urlProvider = { "http://localhost:8080/callback" }
+                urlProvider = { "http://localhost:8080/oauth" }
             }
         }
 
         routing {
             get("/") {
-                call.respondText("Hello from Ktor", ContentType.Text.Html)
+                call.respondText("""Click <a href="/oauth">here</a> to get tokens""", ContentType.Text.Html)
             }
             authenticate("IdentityServer4") {
-                get("/callback") {
-                    // TODO: may require "handle"???
+                get("/oauth") {
                     val principal = call.authentication.principal<OAuthAccessTokenResponse.OAuth2>()
+
                     call.respondText("Access Token = ${principal?.accessToken}")
                 }
             }
-
         }
     }.start(wait = true)
 }
